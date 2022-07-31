@@ -50,7 +50,7 @@
 			$(".destroyProduct").click(function () {
 				if(confirm("Are yu sure want to delete?")){
 					const id = $(this).data("id");
-					const url = `/product/${id}`;
+					const url = `/admin/product/${id}`;
 
 					$.ajax({
 							url: url,

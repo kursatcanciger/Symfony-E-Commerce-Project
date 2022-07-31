@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
-    #[Route('/product', name: 'app_product', methods: ["GET"])]
+    #[Route('/admin/product', name: 'app_product', methods: ["GET"])]
     public function index(ManagerRegistry $doctrine): Response
     {
         $products = $doctrine->getRepository(Product::class)->findAll();
@@ -21,7 +21,7 @@ class ProductController extends AbstractController
         return $this->render('product/index.html.twig', ['products' => $products]);
     }
 
-    #[Route('/product/create', name: 'app_product_create', methods: ["GET"])]
+    #[Route('/admin/product/create', name: 'app_product_create', methods: ["GET"])]
     public function create(ManagerRegistry $doctrine): Response
     {
         $categories = $doctrine->getRepository(Category::class)->findAll();
@@ -31,7 +31,7 @@ class ProductController extends AbstractController
         ]);
     }
 
-    #[Route('/product/{slug}', name: 'app_product_show', methods: ["GET"])]
+    #[Route('/admin/product/{slug}', name: 'app_product_show', methods: ["GET"])]
     public function show(ManagerRegistry $doctrine, string $slug): Response
     {
         $product = $doctrine->getRepository(Product::class)->findOneBy(['slug' => $slug]);
@@ -39,7 +39,7 @@ class ProductController extends AbstractController
         return $this->render('product/show.html.twig', ['product' => $product]);
     }
 
-    #[Route('/product/create', name: 'app_product_store', methods: ["POST"])]
+    #[Route('/admin/product/create', name: 'app_product_store', methods: ["POST"])]
     public function store(ManagerRegistry $doctrine, Request $request, ValidatorInterface $validator): Response
     {
         $entityManager = $doctrine->getManager();
@@ -68,7 +68,7 @@ class ProductController extends AbstractController
         return $this->redirectToRoute('app_product');
     }
 
-    #[Route('/product/{slug}/edit', name: 'app_product_edit', methods: ["GET"])]
+    #[Route('/admin/product/{slug}/edit', name: 'app_product_edit', methods: ["GET"])]
     public function edit(ManagerRegistry $doctrine, string $slug): Response
     {
         $categories = $doctrine->getRepository(Category::class)->findAll();
@@ -77,7 +77,7 @@ class ProductController extends AbstractController
         return $this->render('product/edit.html.twig', ['product' => $product, 'categories' => $categories]);
     }
 
-    #[Route('/product/{slug}', name: 'app_product_update', methods: ["POST"])]
+    #[Route('/admin/product/{slug}', name: 'app_product_update', methods: ["POST"])]
     public function update(ManagerRegistry $doctrine, Request $request, string $slug): Response
     {
         $entityManager = $doctrine->getManager();
@@ -104,7 +104,7 @@ class ProductController extends AbstractController
         return $this->redirectToRoute('app_product');
     }
 
-    #[Route('/product/{id}', name: 'app_product_destroy', methods: ["delete"])]
+    #[Route('/admin/product/{id}', name: 'app_product_destroy', methods: ["delete"])]
     public function destroy(ManagerRegistry $doctrine, int $id): Response
     {
         $entityManager = $doctrine->getManager();

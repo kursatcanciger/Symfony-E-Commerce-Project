@@ -54,7 +54,7 @@
 			$(".destroyCategory").click(function () {
 				if (confirm("Are yu sure want to delete?")) {
 					const id = $(this).data("id");
-					const url = `/category/${id}`;
+					const url = `/admin/category/${id}`;
 
 					$.ajax({
 						url: url,
