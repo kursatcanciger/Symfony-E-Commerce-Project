@@ -16,7 +16,7 @@
 				<div class="mb-3">
 					<label for="parent" class="form-label">Parent Category</label>
 					<select id="parent" name="parent" class="form-control">
-						<option value="">Empty</option>
+						<option value="">Main Category</option>
 						{% for cat in categories %}
 							<option value="{{ cat.id }}" {% if cat == category.getParentCategory() %} selected {% endif %}>
 								{{ cat.name }}
