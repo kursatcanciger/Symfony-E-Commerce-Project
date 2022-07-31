@@ -5,6 +5,27 @@
 		<h1 class="">Homepage</h1>
 	</div>
 
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item">
+				<a href="{{ path('home') }}">All Products</a>
+			</li>
+			{% set path =  "" %}
+			{% for cat in categoriesArray %}
+				{% set path = path ~ "/" ~ cat %}
+				{% if loop.last %}
+					<li class="breadcrumb-item  active " aria-current="page">
+						{{ cat }}
+					</li>
+				{% else %}
+					<li class="breadcrumb-item">
+						<a href="{{ path('home', {slug: path|trim('/', 'left')}) }}">{{ cat }}</a>
+					</li>
+				{% endif %}
+			{% endfor %}
+		</ol>
+	</nav>
+		
 	{% if categories|length > 0 %}
 
 		<div class="d-flex align-items-center mb-4" style="gap: 15px;">

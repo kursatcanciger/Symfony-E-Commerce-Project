@@ -20,16 +20,19 @@ class HomeController extends AbstractController
   public function index(ManagerRegistry $doctrine, string $slug = null): Response
   {
     $category = null;
+    $categoriesArray = [];
 
     if ($slug) {
       $categories = explode('/', $slug);
+      $categoriesArray = $categories;
       $categorySlug = array_pop($categories);
+
 
       $category = $doctrine->getRepository(Category::class)->findBy(['slug' => $categorySlug]);
     }
 
     $categories = $doctrine->getRepository(Category::class)->findBy(['ParentCategory' => $category]);
 
-    return $this->render('home_controller/index.html.twig', ['categories' => $categories]);
+    return $this->render('home_controller/index.html.twig', ['categories' => $categories, 'categoriesArray' => $categoriesArray]);
   }
 }
