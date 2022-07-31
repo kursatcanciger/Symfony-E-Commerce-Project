@@ -1,0 +1,28 @@
+{% extends "template.html.twig" %}
+
+{% block content %}
+	<h2>Create New Category</h2>
+	{% if errors is defined %}
+		{% for error in errors %}
+			<div class="alert alert-danger" role="alert">
+				{{ error.message }}
+			</div>
+		{% endfor %}
+	{% endif %}
+
+	<div class="card mt-4">
+		<div class="card-body">
+			<form method="POST" action="{{ path('app_category_store') }}">
+				<div class="mb-3">
+					<label for="slug" class="form-label">Category Slug</label>
+					<input type="text" class="form-control" id="slug" name="slug" required>
+				</div>
+				<div class="mb-3">
+					<label for="name" class="form-label">Category Name</label>
+					<input type="text" class="form-control" id="name" name="name" required>
+				</div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</div>
+	</div>
+{% endblock %}

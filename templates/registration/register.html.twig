@@ -1,0 +1,21 @@
+{% extends 'template.html.twig' %}
+
+{% block content %}
+	<div class="card mt-4">
+		<div class="card-body">
+			{{ form_start(registrationForm) }}
+			{{ form_row(registrationForm.name) }}
+			{{ form_row(registrationForm.email) }}
+			{{ form_row(registrationForm.plainPassword, {
+            label: 'Password'
+        }) }}
+			{{ form_row(registrationForm.agreeTerms) }}
+
+			<button type="submit" class="btn btn-primary">Register</button>
+			{{ form_end(registrationForm) }}
+
+			<small>You have an account? Please
+				<a href="{{ path('app_login') }}">sign</a>.</small>
+		</div>
+	</div>
+{% endblock %}

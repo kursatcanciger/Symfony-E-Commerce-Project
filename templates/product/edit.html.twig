@@ -1,0 +1,44 @@
+{% extends "template.html.twig" %}
+
+{% block stylesheets %}
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+	<h2>Edit Product</h2>
+	<div class="card mt-4">
+		<div class="card-body">
+			<form method="POST" action="{{ path('app_product_update', {slug: product.slug}) }}">
+				<div class="mb-3">
+					<label for="product_slug" class="form-label">Product Slug</label>
+					<input type="text" class="form-control" id="product_slug" name="product_slug" value="{{ product.slug }}" required>
+				</div>
+				<div class="mb-3">
+					<label for="name" class="form-label">Product Name</label>
+					<input type="text" class="form-control" id="name" name="name" value="{{ product.name }}" required>
+				</div>
+				<div class="mb-3">
+					<label>Select Categories</label>
+					<select class="js-example-basic-multiple form-control" name="categories[]" multiple="multiple" required>
+						{% for category in categories %}
+							<option value="{{ category.id }}" {% if category in product.category %} selected {% endif %}>
+								{{ category.name }}
+							</option>
+						{% endfor %}
+					</select>
+				</div>
+				<button type="submit" class="btn btn-success">Save</button>
+			</form>
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascript %}
+	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+	<script>
+		jQuery(document).ready(function ($) {
+$('.js-example-basic-multiple').select2();
+});
+	</script>
+{% endblock %}

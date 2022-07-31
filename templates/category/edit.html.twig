@@ -1,0 +1,20 @@
+{% extends "template.html.twig" %}
+
+{% block content %}
+	<h2>Edit Category</h2>
+	<div class="card mt-4">
+		<div class="card-body">
+			<form method="POST" action="{{ path('app_category_update', {slug: category.slug}) }}">
+				<div class="mb-3">
+					<label for="category_slug" class="form-label">Category Slug</label>
+					<input type="text" class="form-control" id="category_slug" name="category_slug" value="{{ category.slug }}">
+				</div>
+				<div class="mb-3">
+					<label for="name" class="form-label">Category Name</label>
+					<input type="text" class="form-control" id="name" name="name" value="{{ category.name }}">
+				</div>
+				<button type="submit" class="btn btn-success">Save</button>
+			</form>
+		</div>
+	</div>
+{% endblock %}
