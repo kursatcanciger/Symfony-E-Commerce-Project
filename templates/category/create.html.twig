@@ -21,6 +21,15 @@
 					<label for="name" class="form-label">Category Name</label>
 					<input type="text" class="form-control" id="name" name="name" required>
 				</div>
+				<div class="mb-3">
+					<label for="parent" class="form-label">Parent Category</label>
+					<select id="parent" name="parent" class="form-control">
+						<option value="">Empty</option>
+						{% for cat in categories %}
+							<option value="{{ cat.id }}">{{ cat.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
 				<button type="submit" class="btn btn-primary">Submit</button>
 			</form>
 		</div>

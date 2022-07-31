@@ -27,9 +27,16 @@ class Category
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'category')]
     private Collection $products;
 
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'childs')]
+    private ?self $ParentCategory = null;
+
+    #[ORM\OneToMany(mappedBy: 'ParentCategory', targetEntity: self::class)]
+    private Collection $childs;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
+        $this->childs = new ArrayCollection();
     }
 
     public function __toString()
@@ -88,6 +95,48 @@ class Category
     {
         if ($this->products->removeElement($product)) {
             $product->removeCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function getParentCategory(): ?self
+    {
+        return $this->ParentCategory;
+    }
+
+    public function setParentCategory(?self $ParentCategory): self
+    {
+        $this->ParentCategory = $ParentCategory;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getChilds(): Collection
+    {
+        return $this->childs;
+    }
+
+    public function addChild(self $child): self
+    {
+        if (!$this->childs->contains($child)) {
+            $this->childs->add($child);
+            $child->setParentCategory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChild(self $child): self
+    {
+        if ($this->childs->removeElement($child)) {
+            // set the owning side to null (unless already changed)
+            if ($child->getParentCategory() === $this) {
+                $child->setParentCategory(null);
+            }
         }
 
         return $this;

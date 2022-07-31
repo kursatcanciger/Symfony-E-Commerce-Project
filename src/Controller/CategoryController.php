@@ -21,9 +21,10 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/category/create', name: 'app_category_create', methods: ["GET"])]
-    public function create(): Response
+    public function create(ManagerRegistry $doctrine): Response
     {
-        return $this->render('category/create.html.twig');
+        $categories = $doctrine->getRepository(Category::class)->findAll();
+        return $this->render('category/create.html.twig', ['categories' => $categories]);
     }
 
     #[Route('/category/{slug}', name: 'app_category_show', methods: ["GET"])]
@@ -43,6 +44,11 @@ class CategoryController extends AbstractController
         $category->setSlug($request->get('slug'));
         $category->setName($request->get('name'));
 
+        if ($request->get('parent')) {
+            $parent = $doctrine->getRepository(Category::class)->find($request->get('parent'));
+            $category->setParentCategory($parent);
+        }
+
         $errors = $validator->validate($category);
 
         if (count($errors) > 0) {
@@ -60,8 +66,9 @@ class CategoryController extends AbstractController
     public function edit(ManagerRegistry $doctrine, string $slug): Response
     {
         $category = $doctrine->getRepository(Category::class)->findOneBy(['slug' => $slug]);
+        $categories = $doctrine->getRepository(Category::class)->findAll();
 
-        return $this->render('category/edit.html.twig', ['category' => $category]);
+        return $this->render('category/edit.html.twig', ['category' => $category, 'categories' => $categories]);
     }
 
     #[Route('/category/{slug}', name: 'app_category_update', methods: ["POST"])]
@@ -72,6 +79,11 @@ class CategoryController extends AbstractController
         $category = $doctrine->getRepository(Category::class)->findOneBy(['slug' => $slug]);
         $category->setSlug($request->get('category_slug'));
         $category->setName($request->get('name'));
+
+        if ($request->get('parent')) {
+            $parent = $doctrine->getRepository(Category::class)->find($request->get('parent'));
+            $category->setParentCategory($parent);
+        }
 
         $entityManager->persist($category);
 
