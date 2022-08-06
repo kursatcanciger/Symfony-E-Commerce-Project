@@ -1,0 +1,63 @@
+{% extends 'template.html.twig' %}
+
+{% block content %}
+  <h2>Shopping Cart</h2>
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col">Product</th>
+          <th scope="col">Price</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% set totalPrice = 0 %}
+        {% for key, item in cart.getProducts %}
+          {% set totalPrice = totalPrice + item.quantity * products[item.id].price %}
+          <tr>
+            <td>{{ item.quantity }}x {{ products[item.id].name }}</td>
+            <td>$ {{ item.quantity * products[item.id].price }}</td>
+            <td>
+              <button type="button" class="btn btn-danger btn-sm removeCartItem" data-index="{{ key }}"><span data-feather="x" class="align-text-bottom"></span></button>
+            </td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <td>
+            <b>Total</b>
+          </td>
+          <td>
+            <b>$ {{ totalPrice }}</b>
+          </td>
+          <td>
+            {% if totalPrice > 0 %}
+              <a href="#" class="btn btn-success btn-sm">Checkout</a>
+            {% endif %}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    jQuery(document).ready(function ($) {
+      $('.removeCartItem').click(function () {
+        const index = $(this).data('index')
+    
+        $.ajax({
+          type: 'DELETE',
+          url: '{{ path("app_shopping_cart_remove") }}',
+          data: {
+            index
+          },
+          success: function (response) {
+            window.location.reload()
+          }
+        })
+      })
+    })
+  </script>
+{% endblock %}

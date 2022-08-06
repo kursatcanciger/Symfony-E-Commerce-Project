@@ -26,6 +26,9 @@ class Product
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
     private Collection $category;
 
+    #[ORM\Column]
+    private ?float $Price = null;
+
     public function __construct()
     {
         $this->category = new ArrayCollection();
@@ -80,6 +83,18 @@ class Product
     public function removeCategory(Category $category): self
     {
         $this->category->removeElement($category);
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->Price;
+    }
+
+    public function setPrice(float $Price): self
+    {
+        $this->Price = $Price;
 
         return $this;
     }

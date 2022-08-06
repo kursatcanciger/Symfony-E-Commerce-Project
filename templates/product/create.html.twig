@@ -1,50 +1,52 @@
-{% extends "template.html.twig" %}
+{% extends 'template.html.twig' %}
 
 {% block stylesheets %}
-	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 {% endblock %}
 
 {% block content %}
-	<h2>Create New Product</h2>
-	{% if errors is defined %}
-		{% for error in errors %}
-			<div class="alert alert-danger" role="alert">
-				{{ error.message }}
-			</div>
-		{% endfor %}
-	{% endif %}
-	
-	<div class="card mt-4">
-		<div class="card-body">
-			<form method="POST" action="{{ path('app_product_store') }}">
-				<div class="mb-3">
-					<label for="slug" class="form-label">Product Slug</label>
-					<input type="text" class="form-control" id="slug" name="slug" required>
-				</div>
-				<div class="mb-3">
-					<label for="name" class="form-label">Product Name</label>
-					<input type="text" class="form-control" id="name" name="name" required>
-				</div>
-				<div class="mb-3">
-					<label>Select Categories</label>
-					<select class="js-example-basic-multiple form-control" name="categories[]" multiple="multiple" required>
-						{% for category in categories %}
-							<option value="{{ category.id }}">{{ category.name }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<button type="submit" class="btn btn-primary">Submit</button>
-			</form>
-		</div>
-	</div>
+  <h2>Create New Product</h2>
+  {% if errors is defined %}
+    {% for error in errors %}
+      <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="card mt-4">
+    <div class="card-body">
+      <form method="POST" action="{{ path('app_product_store') }}">
+        <div class="mb-3">
+          <label for="slug" class="form-label">Product Slug</label>
+          <input type="text" class="form-control" id="slug" name="slug" required />
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Product Name</label>
+          <input type="text" class="form-control" id="name" name="name" required />
+        </div>
+        <div class="mb-3">
+          <label>Select Categories</label>
+          <select class="js-example-basic-multiple form-control" name="categories[]" multiple="multiple" required>
+            {% for category in categories %}
+              <option value="{{ category.id }}">{{ category.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="price" class="form-label">Product Price</label>
+          <input type="number" step="0.01" class="form-control" id="price" name="price" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
 {% endblock %}
 
 {% block javascript %}
-	<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-	<script>
-		jQuery(document).ready(function ($) {
-			$('.js-example-basic-multiple').select2();
-		});
-	</script>
+  <script>
+    jQuery(document).ready(function ($) {
+      $('.js-example-basic-multiple').select2()
+    })
+  </script>
 {% endblock %}

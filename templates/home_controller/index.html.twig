@@ -94,13 +94,24 @@
       $('.productCard').click(function () {
         const product = $(this).data('product')
         const name = $(this).data('name')
-        const piece = prompt(`How many "${name}" will you add to your shopping cart?`, 0)
+        const quantity = prompt(`How many "${name}" will you add to your shopping cart?`, 0)
     
-        if (isNaN(piece)) {
+        if (isNaN(quantity)) {
           alert('You can only enter numeric characters.')
         }
     
-        if (piece > 0) {
+        if (quantity > 0) {
+          $.ajax({
+            type: 'POST',
+            url: '{{ path("app_shopping_cart_add") }}',
+            data: {
+              product,
+              quantity
+            },
+            success: function (response) {
+              //console.log(response)
+            }
+          })
         }
       })
     })

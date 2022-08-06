@@ -47,6 +47,7 @@ class ProductController extends AbstractController
         $product = new Product();
         $product->setSlug($request->get('slug'));
         $product->setName($request->get('name'));
+        $product->setPrice($request->get('price'));
 
         foreach ($request->get('categories') as $id) {
             $category = $doctrine->getRepository(Category::class)->find($id);
@@ -86,6 +87,7 @@ class ProductController extends AbstractController
 
         $product->setSlug($request->get('product_slug'));
         $product->setName($request->get('name'));
+        $product->setPrice($request->get('price'));
 
         foreach ($product->getCategory() as $category) {
             $product->removeCategory($category);

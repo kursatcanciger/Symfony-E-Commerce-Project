@@ -10,6 +10,7 @@
 					<th scope="col">Product Name</th>
 					<th scope="col">Product Slug</th>
 					<th scope="col">Product Categories</th>
+					<th scope="col">Product Price</th>
 					<th scope="col">Actions</th>
 				</tr>
 			</thead>
@@ -20,6 +21,7 @@
 						<td>{{ product.name }}</td>
 						<td>{{ product.slug }}</td>
 						<td>{{ product.category|join(', ') }}</td>
+						<td>$ {{ product.price }}</td>
 						<td>
 							<a href="{{ path('app_product_show', {slug: product.slug}) }}">
 								<button class="btn btn-primary btn-sm">
