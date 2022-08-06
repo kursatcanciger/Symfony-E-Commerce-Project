@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Product;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,11 +29,19 @@ class HomeController extends AbstractController
       $categorySlug = array_pop($categories);
 
 
-      $category = $doctrine->getRepository(Category::class)->findBy(['slug' => $categorySlug]);
+      $category = $doctrine->getRepository(Category::class)->findOneBy(['slug' => $categorySlug]);
+
+      $products = $category->getProducts();
     }
+
+    if (!$slug) $products = $doctrine->getRepository(Product::class)->findAll();
 
     $categories = $doctrine->getRepository(Category::class)->findBy(['ParentCategory' => $category]);
 
-    return $this->render('home_controller/index.html.twig', ['categories' => $categories, 'categoriesArray' => $categoriesArray]);
+    return $this->render('home_controller/index.html.twig', [
+      'categories' => $categories,
+      'categoriesArray' => $categoriesArray,
+      'products' => $products
+    ]);
   }
 }
