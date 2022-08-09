@@ -8,10 +8,11 @@
         <tr>
           <th scope="col">#</th>
           <th scope="col">User Name</th>
-          <th scope="col">Product Count</th>
+          <th scope="col">Products</th>
           <th scope="col">Total Price</th>
           <th scope="col">Discount</th>
           <th scope="col">Price</th>
+          <th scope="col">Status</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
@@ -20,11 +21,18 @@
           <tr>
             <td>{{ order.id }}</td>
             <td>{{ order.getUser.name }}</td>
-            <td>{{ order.products|length }}</td>
+            <td>
+              {% for product in order.products %}
+                {{ product.quantity }}x {{ product.name }}<br />
+              {% endfor %}
+            </td>
             <td>{{ order.totalPrice }}</td>
             <td>{{ order.discount }}</td>
             <td>{{ order.price }}</td>
-            <td>#</td>
+            <td>{{ order.status }}</td>
+            <td>
+              <a class="btn btn-warning btn-sm" href="{{ path('app_order_edit', { id: order.id }) }}"><span data-feather="edit" class="align-text-bottom"></span></a>
+            </td>
           </tr>
         {% endfor %}
       </tbody>

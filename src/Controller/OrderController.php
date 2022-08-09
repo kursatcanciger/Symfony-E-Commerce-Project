@@ -111,4 +111,26 @@ class OrderController extends AbstractController
             'orders' => $orders
         ]);
     }
+
+    #[Route('/admin/order/{id}', name: 'app_order_edit', methods: ["GET"])]
+    public function edit(ManagerRegistry $doctrine, int $id): Response
+    {
+        $order = $doctrine->getRepository(Order::class)->findOneBy(["id" => $id]);
+        return $this->render('order/edit.html.twig', [
+            'order' => $order
+        ]);
+    }
+
+    #[Route('/admin/order/{id}', name: 'app_order_update', methods: ["POST"])]
+    public function update(ManagerRegistry $doctrine, Request $request, int $id): Response
+    {
+        $entityManager = $doctrine->getManager();
+
+        $order = $doctrine->getRepository(Order::class)->findOneBy(["id" => $id]);
+        $order->setStatus($request->get('status'));
+
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_order');
+    }
 }

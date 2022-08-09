@@ -1,0 +1,21 @@
+{% extends 'template.html.twig' %}
+
+{% block content %}
+  <h2>Edit Order</h2>
+  <div class="card mt-4">
+    <div class="card-body">
+      <form method="POST" action="{{ path('app_order_update', { id: order.id }) }}">
+        <div class="mb-3">
+          <label for="status" class="form-label">Order Status</label>
+          <select name="status" id="status" class="form-control">
+            <option {{ order.status == 'Pending' ? 'selected' : '' }}>Pending</option>
+            <option {{ order.status == 'Approved' ? 'selected' : '' }}>Approved</option>
+            <option {{ order.status == 'Completed' ? 'selected' : '' }}>Completed</option>
+            <option {{ order.status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-success">Save</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
