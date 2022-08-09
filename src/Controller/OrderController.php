@@ -84,9 +84,22 @@ class OrderController extends AbstractController
         $order->setStatus("Pending");
 
         $entityManager->persist($order);
+
+        $cart->setProducts([]);
+
         $entityManager->flush();
 
-        return $this->json($productsInCart);
+        return $this->redirectToRoute('app_user_order');
+    }
+
+    #[Route('/profile/order', name: 'app_user_order', methods: ["GET"])]
+    public function user_order(): Response
+    {
+        $user = $this->security->getUser();
+        $orders = $user->getOrders();
+        return $this->render('order/user_order.html.twig', [
+            'orders' => $orders
+        ]);
     }
 
     #[Route('/admin/order', name: 'app_order', methods: ["GET"])]
