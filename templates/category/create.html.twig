@@ -1,37 +1,45 @@
-{% extends "template.html.twig" %}
+{% extends 'template.html.twig' %}
 
 {% block content %}
-	<h2>Create New Category</h2>
-	{% if errors is defined %}
-		{% for error in errors %}
-			<div class="alert alert-danger" role="alert">
-				{{ error.message }}
-			</div>
-		{% endfor %}
-	{% endif %}
+  <h2>Create New Category</h2>
+  {% if errors is defined %}
+    {% for error in errors %}
+      <div class="alert alert-danger" role="alert">{{ error.message }}</div>
+    {% endfor %}
+  {% endif %}
 
-	<div class="card mt-4">
-		<div class="card-body">
-			<form method="POST" action="{{ path('app_category_store') }}">
-				<div class="mb-3">
-					<label for="slug" class="form-label">Category Slug</label>
-					<input type="text" class="form-control" id="slug" name="slug" required>
-				</div>
-				<div class="mb-3">
-					<label for="name" class="form-label">Category Name</label>
-					<input type="text" class="form-control" id="name" name="name" required>
-				</div>
-				<div class="mb-3">
-					<label for="parent" class="form-label">Parent Category</label>
-					<select id="parent" name="parent" class="form-control">
-						<option value="">Main Category</option>
-						{% for cat in categories %}
-							<option value="{{ cat.id }}">{{ cat.name }}</option>
-						{% endfor %}
-					</select>
-				</div>
-				<button type="submit" class="btn btn-primary">Submit</button>
-			</form>
-		</div>
-	</div>
+  <div class="card mt-4">
+    <div class="card-body">
+      <form method="POST" action="{{ path('app_category_store') }}">
+        <div class="mb-3">
+          <label for="slug" class="form-label">Category Slug</label>
+          <input type="text" class="form-control" id="slug" name="slug" required readonly />
+        </div>
+        <div class="mb-3">
+          <label for="name" class="form-label">Category Name</label>
+          <input type="text" class="form-control" id="name" name="name" required />
+        </div>
+        <div class="mb-3">
+          <label for="parent" class="form-label">Parent Category</label>
+          <select id="parent" name="parent" class="form-control">
+            <option value="">Main Category</option>
+            {% for cat in categories %}
+              <option value="{{ cat.id }}">{{ cat.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    jQuery(document).ready(function ($) {
+      $('#name').keyup(function () {
+        $('#slug').val(convertToSlug($(this).val()))
+      })
+    })
+  </script>
 {% endblock %}

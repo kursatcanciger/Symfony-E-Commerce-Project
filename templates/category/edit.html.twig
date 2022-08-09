@@ -7,11 +7,11 @@
 			<form method="POST" action="{{ path('app_category_update', {slug: category.slug}) }}">
 				<div class="mb-3">
 					<label for="category_slug" class="form-label">Category Slug</label>
-					<input type="text" class="form-control" id="category_slug" name="category_slug" value="{{ category.slug }}">
+					<input type="text" class="form-control" id="category_slug" name="category_slug" value="{{ category.slug }}" required readonly>
 				</div>
 				<div class="mb-3">
 					<label for="name" class="form-label">Category Name</label>
-					<input type="text" class="form-control" id="name" name="name" value="{{ category.name }}">
+					<input type="text" class="form-control" id="name" name="name" value="{{ category.name }}" required>
 				</div>
 				<div class="mb-3">
 					<label for="parent" class="form-label">Parent Category</label>
@@ -28,4 +28,14 @@
 			</form>
 		</div>
 	</div>
+{% endblock %}
+
+{% block javascript %}
+	<script>
+    jQuery(document).ready(function ($) {
+      $('#name').keyup(function () {
+        $('#category_slug').val(convertToSlug($(this).val()))
+      })
+    })
+  </script>
 {% endblock %}

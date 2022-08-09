@@ -192,6 +192,14 @@
 				
 				<script src="{{ asset('js/template.js') }}"></script>
 
+				<script>
+				function convertToSlug(Text) {
+  				return Text.toLowerCase()
+             .replace(/ /g, '-')
+             .replace(/[^\w-]+/g, '');
+				}
+				</script>
+
 				{% block javascript %}{% endblock %}
 			</body>
 		</html>
