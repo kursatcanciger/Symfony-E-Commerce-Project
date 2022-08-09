@@ -55,7 +55,11 @@
         <div class="card" style="width: 18rem;">
           <a href="javascript:void(0);" class="text-decoration-none productCard" data-product="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.price }}">
             <div class="card-body">
-              <h5 class="card-title"><span data-feather="shopping-cart" class="align-text-bottom"></span> {{ product.name }}</h5>
+              <p>
+                <span data-feather="shopping-cart" class="align-text-bottom"></span>
+                $ {{ product.price }}
+              </p>
+              <h5 class="card-title">{{ product.name }}</h5>
               <small class="mb-2 text-muted">{{ product.getCategory|join(', ') }}</small>
             </div>
           </a>
