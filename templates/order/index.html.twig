@@ -1,0 +1,33 @@
+{% extends 'template.html.twig' %}
+
+{% block content %}
+  <h2>Order List</h2>
+  <div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">User Name</th>
+          <th scope="col">Product Count</th>
+          <th scope="col">Total Price</th>
+          <th scope="col">Discount</th>
+          <th scope="col">Price</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+          <tr>
+            <td>{{ order.id }}</td>
+            <td>{{ order.getUser.name }}</td>
+            <td>{{ order.products|length }}</td>
+            <td>{{ order.totalPrice }}</td>
+            <td>{{ order.discount }}</td>
+            <td>{{ order.price }}</td>
+            <td>#</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

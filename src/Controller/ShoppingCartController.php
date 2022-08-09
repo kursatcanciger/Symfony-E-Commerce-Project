@@ -47,7 +47,6 @@ class ShoppingCartController extends AbstractController
         }
 
         return $this->render('shopping_cart/index.html.twig', [
-            'controller_name' => 'ShoppingCartController',
             'cart' => $cart,
             'products' => $allProducts
         ]);

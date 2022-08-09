@@ -92,27 +92,31 @@
       })
     
       $('.productCard').click(function () {
-        const product = $(this).data('product')
-        const name = $(this).data('name')
-        const quantity = prompt(`How many "${name}" will you add to your shopping cart?`, 0)
-    
-        if (isNaN(quantity)) {
-          alert('You can only enter numeric characters.')
-        }
-    
-        if (quantity > 0) {
-          $.ajax({
-            type: 'POST',
-            url: '{{ path("app_shopping_cart_add") }}',
-            data: {
-              product,
-              quantity
-            },
-            success: function (response) {
-              //console.log(response)
-            }
-          })
-        }
+        {% if app.user %}
+          const product = $(this).data('product')
+          const name = $(this).data('name')
+          const quantity = prompt(`How many "${name}" will you add to your shopping cart?`, 0)
+      
+          if (isNaN(quantity)) {
+            alert('You can only enter numeric characters.')
+          }
+      
+          if (quantity > 0) {
+            $.ajax({
+              type: 'POST',
+              url: '{{ path("app_shopping_cart_add") }}',
+              data: {
+                product,
+                quantity
+              },
+              success: function (response) {
+                toastr.success('The product has been successfully added to your shopping cart!')
+              }
+            })
+          }
+        {% else %}
+          toastr.warning('You must sign in first.')
+        {% endif %}
       })
     })
   </script>
