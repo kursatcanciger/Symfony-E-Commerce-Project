@@ -7,24 +7,32 @@
       <thead>
         <tr>
           <th scope="col">Product</th>
-          <th scope="col">Price</th>
+          <th scope="col">Unit Price</th>
+          <th scope="col">Total Price</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
         {% set totalPrice = 0 %}
-        {% for key, item in cart.getProducts %}
-          {% set totalPrice = totalPrice + item.quantity * products[item.id].price %}
+        {% for key, item in productsInCart %}
+          {% set totalPrice = totalPrice + item.price %}
           <tr>
-            <td>{{ item.quantity }}x {{ products[item.id].name }}</td>
-            <td>$ {{ item.quantity * products[item.id].price }}</td>
+            <td>{{ item.quantity }}x {{ item.name }}</td>
+            <td>$ {{ item.unitPrice }}</td>
+            <td>
+              {% if item.totalDiscount > 0 %}
+                $ {{ item.totalPrice }} - $ {{ item.totalDiscount }} = $ {{ item.price }} ({{ item.description }})
+              {% else %}
+                $ {{ item.price }}
+              {% endif %}
+            </td>
             <td>
               <button type="button" class="btn btn-danger btn-sm removeCartItem" data-index="{{ key }}"><span data-feather="x" class="align-text-bottom"></span></button>
             </td>
           </tr>
         {% endfor %}
         <tr>
-          <td>
+          <td colspan="2">
             <b>Total</b>
           </td>
           <td>

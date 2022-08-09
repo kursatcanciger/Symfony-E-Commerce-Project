@@ -38,7 +38,6 @@
             <div class="card-body">
               <h5 class="card-title">{{ cat.name }}</h5>
               <h6 class="card-subtitle mb-2 text-muted">{{ cat.slug }}</h6>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
               <span data-feather="arrow-right" class="align-text-bottom"></span>
             </div>
           </a>
@@ -54,12 +53,10 @@
     <div class="row flex-row mb-4" style="gap: 15px;">
       {% for product in products %}
         <div class="card" style="width: 18rem;">
-          <a href="javascript:void(0);" class="text-decoration-none productCard" data-product="{{ product.id }}" data-name="{{ product.name }}">
+          <a href="javascript:void(0);" class="text-decoration-none productCard" data-product="{{ product.id }}" data-name="{{ product.name }}" data-price="{{ product.price }}">
             <div class="card-body">
-              <h5 class="card-title">{{ product.name }}</h5>
+              <h5 class="card-title"><span data-feather="shopping-cart" class="align-text-bottom"></span> {{ product.name }}</h5>
               <small class="mb-2 text-muted">{{ product.getCategory|join(', ') }}</small>
-              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-              <span data-feather="shopping-cart" class="align-text-bottom"></span>
             </div>
           </a>
         </div>
@@ -95,6 +92,7 @@
         {% if app.user %}
           const product = $(this).data('product')
           const name = $(this).data('name')
+          const price = $(this).data('price')
           const quantity = prompt(`How many "${name}" will you add to your shopping cart?`, 0)
       
           if (isNaN(quantity)) {
@@ -107,7 +105,8 @@
               url: '{{ path("app_shopping_cart_add") }}',
               data: {
                 product,
-                quantity
+                quantity,
+                price
               },
               success: function (response) {
                 toastr.success('The product has been successfully added to your shopping cart!')

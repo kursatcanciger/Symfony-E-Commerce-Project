@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Product;
 use App\Entity\ShoppingCart;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,13 +28,7 @@ class ShoppingCartController extends AbstractController
         $cart = $user->getShoppingCart();
         $products = $doctrine->getRepository(Product::class)->findAll();
         $allProducts = array();
-
-        foreach ($products as $product) {
-            $allProducts[$product->getId()] = [
-                "name" => $product->getName(),
-                "price" => $product->getPrice()
-            ];
-        }
+        $productsInCart = array();
 
         if (!$cart) {
             $entityManager = $doctrine->getManager();
@@ -46,9 +41,75 @@ class ShoppingCartController extends AbstractController
             $entityManager->flush();
         }
 
+        $campaignCategory = $doctrine->getRepository(Category::class)->findOneBy(['slug' => 'erkek-ayakkabi']);
+
+        foreach ($products as $product) {
+            $allProducts[$product->getId()] = [
+                "name" => $product->getName(),
+                "price" => $product->getPrice(),
+                "category" => $product->getCategory()
+            ];
+        }
+
+        $cartProducts = $cart->getProducts();
+
+        $cheapProduct = array_reduce($cartProducts, function ($a, $b) {
+            return $a && $a['price'] < $b['price'] ? $a : $b;
+        });
+
+        foreach ($cartProducts as $key => $value) {
+            $totalPrice = 0;
+            $totalDiscount = 0;
+            $price = 0;
+
+            $name = $allProducts[$value["id"]]["name"];
+            $quantity = $value["quantity"];
+            $unitPrice = $allProducts[$value["id"]]["price"];
+            $categories = $allProducts[$value["id"]]["category"];
+            $description = "";
+
+            if ($categories->contains($campaignCategory) && $quantity >= 3) {
+                $price += ($quantity - 1) * $unitPrice;
+                $totalDiscount +=  $unitPrice;
+                $description = "Buy 3 get 1 free!";
+            } else {
+                if (count($cartProducts) == 1) {
+                    if ($quantity > 1) {
+                        $price += ($quantity - 1) * $unitPrice;
+                        $price += $unitPrice / 2;
+                        $totalDiscount +=  $unitPrice / 2;
+                        $description = "2nd product 50% off!";
+                    } else {
+                        $price += $quantity * $unitPrice;
+                    }
+                } elseif (count($cartProducts) > 1) {
+                    if ($value == $cheapProduct && $quantity > 1) {
+                        $price += ($quantity - 1) * $unitPrice;
+                        $price += $unitPrice / 2;
+                        $totalDiscount +=  $unitPrice / 2;
+                        $description = "2nd product 50% off!";
+                    } else {
+                        $price += $quantity * $unitPrice;
+                    }
+                }
+            }
+
+            $totalPrice += $quantity * $unitPrice;
+
+            array_push($productsInCart, array(
+                "name" => $name,
+                "quantity" => $quantity,
+                "unitPrice" => $unitPrice,
+                "totalPrice" => $totalPrice,
+                "totalDiscount" => $totalDiscount,
+                "price" => $price,
+                "description" => $description
+
+            ));
+        }
+
         return $this->render('shopping_cart/index.html.twig', [
-            'cart' => $cart,
-            'products' => $allProducts
+            'productsInCart' => $productsInCart
         ]);
     }
 
@@ -60,12 +121,24 @@ class ShoppingCartController extends AbstractController
         $user = $this->security->getUser();
         $cart = $user->getShoppingCart();
 
+        if (!$cart) {
+            $entityManager = $doctrine->getManager();
+
+            $cart = new ShoppingCart();
+            $cart->setUser($user);
+            $cart->setProducts([]);
+
+            $entityManager->persist($cart);
+            $entityManager->flush();
+        }
+
         $products = $cart->getProducts();
 
-        array_push($products, [
+        array_push($products, array(
             'id' => $request->get('product'),
             'quantity' => $request->get('quantity'),
-        ]);
+            'price' => $request->get('price')
+        ));
 
         $cart->setProducts($products);
         $entityManager->flush();
@@ -84,7 +157,7 @@ class ShoppingCartController extends AbstractController
 
         $products = $cart->getProducts();
 
-        unset($products[$request->get('index')]);
+        array_splice($products, $request->get("index"), 1);
 
         $cart->setProducts($products);
         $entityManager->flush();

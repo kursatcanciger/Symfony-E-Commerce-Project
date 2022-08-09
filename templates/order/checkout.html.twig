@@ -9,20 +9,30 @@
           <thead>
             <tr>
               <th scope="col">Product</th>
-              <th scope="col">Price</th>
+              <th scope="col">Unit Price</th>
+              <th scope="col">Total Price</th>
             </tr>
           </thead>
           <tbody>
             {% set totalPrice = 0 %}
-            {% for key, item in cart.getProducts %}
-              {% set totalPrice = totalPrice + item.quantity * products[item.id].price %}
+            {% set totalDiscount = 0 %}
+            {% for key, item in productsInCart %}
+              {% set totalPrice = totalPrice + item.price %}
               <tr>
-                <td>{{ item.quantity }}x {{ products[item.id].name }}</td>
-                <td>$ {{ item.quantity * products[item.id].price }}</td>
+                <td>{{ item.quantity }}x {{ item.name }}</td>
+                <td>$ {{ item.unitPrice }}</td>
+                <td>
+                  {% if item.totalDiscount > 0 %}
+                    {% set totalDiscount = totalDiscount + item.totalDiscount %}
+                    $ {{ item.totalPrice }} - $ {{ item.totalDiscount }} = $ {{ item.price }} ({{ item.description }})
+                  {% else %}
+                    $ {{ item.price }}
+                  {% endif %}
+                </td>
               </tr>
             {% endfor %}
             <tr>
-              <td>
+              <td colspan="2">
                 <b>Total</b>
               </td>
               <td>
@@ -35,25 +45,12 @@
     </div>
   </div>
 
-  <h2 class="mb-4">Gift Card & Coupon Code</h2>
-
-  <div class="card mb-4">
-    <div class="card-body">
-      <form method="POST" action="">
-        <div class="mb-3">
-          <label for="coupon_code" class="form-label">Coupon Code</label>
-          <input type="text" class="form-control" id="coupon_code" name="coupon_code" required />
-        </div>
-        <button type="submit" class="btn btn-primary btn-sm">Apply Coupon Code</button>
-      </form>
-    </div>
-  </div>
-
   <h2 class="mb-4">Shipping Address</h2>
 
   <div class="card mb-4">
     <div class="card-body">
       <form method="POST" action="">
+        <input type="hidden" name="discount" id="discount" value="{{ totalDiscount }}" />
         <div class="row mb-3">
           <div class="col">
             <label for="f_name" class="form-label">First Name</label>
